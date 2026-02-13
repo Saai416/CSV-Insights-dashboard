@@ -64,10 +64,13 @@ def create_app():
     
     return app
 
+    return app
+
+
+# Create app instance for Gunicorn
+app = create_app()
 
 if __name__ == '__main__':
-    app = create_app()
-    
     # Ensure upload directory exists
     os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True)
     
