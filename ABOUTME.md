@@ -1,6 +1,9 @@
 # About Me & Project Approach
 
 ## The Developer
+**Name**: Sai Prakash GS
+**Resume/LinkedIn**: [View My Resume](./resume.pdf)
+
 I am a Full Stack Engineer with a strong focus on building robust, production-ready AI applications. My approach combines clean, maintainable code with modern user experience principles.
 
 ## Approach to This Assignment
