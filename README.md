@@ -2,7 +2,7 @@
 
 A production-ready, AI-powered data analysis tool built with Flask and Groq's LLM API.
 
-![Dashboard Preview](https://via.placeholder.com/800x400?text=CSV+Insights+Dashboard+Preview)
+
 
 ## 🚀 Key Features
 
@@ -100,6 +100,14 @@ If hosting is not possible, you can run the app with a single command:
 docker-compose up --build
 ```
 The app will be available at `http://localhost:5000`.
+ 
+## ⚠️ Limitations (What is Not Done)
+ 
+To maintain a strict "production-ready" scope within the assignment timeframe, the following were intentionally omitted:
+- **User Authentication**: The app is currently single-user. Multi-tenant support would require a user model and session management.
+- **Advanced Charting**: Charts are auto-generated based on heuristics. Custom axis selection and chart type toggling are not yet implemented.
+- **Large File Streaming**: Files are processed in-memory (Pandas). For multi-GB files, a streaming approach (Dask/Chunking) would be needed.
+- **Persistent Cloud Storage**: On the free Render tier, the SQLite database resets on restart. Production would use PostgreSQL.
  
 ## 📄 License
  
