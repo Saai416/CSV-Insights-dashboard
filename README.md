@@ -78,6 +78,8 @@ Comprehensive edge case handling is implemented. Test files are provided in the 
 ## 🚀 Deployment Guide
  
 This application is ready for deployment on **Render** (easiest, free) or via **Docker**.
+
+> **Note**: The live demo is hosted on Render's free tier. Please allow ~1 minute for the initial load if the instance has spun down due to inactivity.
  
 ### Option 1: Deploy to Render (Recommended)
 1. Fork/Push this repository to your GitHub.
