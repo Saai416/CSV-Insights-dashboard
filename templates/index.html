@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Insights Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Header Section -->
+    <header class="bg-slate-800 text-white py-6 shadow-sm">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-semibold">CSV Insights Dashboard</h1>
+            <p class="text-slate-300 mt-1">AI-powered data analysis and visualization</p>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+
+        <!-- Step Indicator Section -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Process Workflow</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Step 1 -->
+                <div class="flex items-center space-x-3 p-4 border border-gray-300 rounded" id="step1">
+                    <div
+                        class="flex-shrink-0 w-8 h-8 bg-slate-700 text-white rounded-full flex items-center justify-center font-medium text-sm">
+                        1</div>
+                    <div>
+                        <p class="font-medium text-gray-800 text-sm">Upload CSV</p>
+                        <p class="text-xs text-gray-500">Select file</p>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="flex items-center space-x-3 p-4 border border-gray-200 rounded" id="step2">
+                    <div
+                        class="flex-shrink-0 w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-medium text-sm">
+                        2</div>
+                    <div>
+                        <p class="font-medium text-gray-800 text-sm">Review Data</p>
+                        <p class="text-xs text-gray-500">Preview structure</p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="flex items-center space-x-3 p-4 border border-gray-200 rounded" id="step3">
+                    <div
+                        class="flex-shrink-0 w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-medium text-sm">
+                        3</div>
+                    <div>
+                        <p class="font-medium text-gray-800 text-sm">Generate Insights</p>
+                        <p class="text-xs text-gray-500">AI analysis</p>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="flex items-center space-x-3 p-4 border border-gray-200 rounded" id="step4">
+                    <div
+                        class="flex-shrink-0 w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-medium text-sm">
+                        4</div>
+                    <div>
+                        <p class="font-medium text-gray-800 text-sm">Save / Export</p>
+                        <p class="text-xs text-gray-500">Download report</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Left Column: Upload & Analysis -->
+            <div class="lg:col-span-2 space-y-6">
+
+                <!-- Upload Section -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Upload CSV File</h2>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition"
+                        id="dropzone">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none"
+                            viewBox="0 0 48 48">
+                            <path
+                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <p class="mt-2 text-sm text-gray-600">Click to upload or drag and drop</p>
+                        <p class="text-xs text-gray-500 mt-1">CSV files only (Max 5MB)</p>
+                        <input type="file" id="fileInput" accept=".csv" class="hidden">
+                        <button onclick="document.getElementById('fileInput').click()"
+                            class="mt-4 bg-slate-700 text-white px-6 py-2 rounded hover:bg-slate-800 transition text-sm font-medium">
+                            Select File
+                        </button>
+                    </div>
+                    <div id="fileInfo" class="mt-4 hidden">
+                        <p class="text-sm text-gray-700"><strong>Selected:</strong> <span id="fileName"></span></p>
+                    </div>
+                    <!-- Error/Success Messages -->
+                    <div id="errorMsg"
+                        class="hidden mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative"
+                        role="alert"></div>
+                    <div id="successMsg"
+                        class="hidden mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded relative"
+                        role="alert"></div>
+                    <div id="warningMsg"
+                        class="hidden mb-6 bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded relative"
+                        role="alert"></div>
+                </div>
+
+                <!-- Dataset Summary Panel -->
+                <div id="summaryPanel" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hidden">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Dataset Summary</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded">
+                            <p class="text-2xl font-bold text-gray-800" id="rowCount">0</p>
+                            <p class="text-sm text-gray-600">Rows</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded">
+                            <p class="text-2xl font-bold text-gray-800" id="colCount">0</p>
+                            <p class="text-sm text-gray-600">Columns</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded">
+                            <p class="text-2xl font-bold text-gray-800" id="numericCount">0</p>
+                            <p class="text-sm text-gray-600">Numeric</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded">
+                            <p class="text-2xl font-bold text-gray-800" id="categoricalCount">0</p>
+                            <p class="text-sm text-gray-600">Categorical</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Preview Table -->
+                <div id="previewPanel" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hidden">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Data Preview (First 50 Rows)</h2>
+                    <div class="overflow-x-auto max-h-96 border rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200" id="previewTable">
+                            <thead class="bg-gray-50 sticky top-0">
+                                <tr id="tableHeader"></tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="tableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div id="chartsPanel" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hidden">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Data Visualization</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-700 mb-2" id="barChartTitle">Sample Values</h3>
+                            <canvas id="barChart"></canvas>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-700 mb-2" id="histogramTitle">Distribution</h3>
+                            <canvas id="histogram"></canvas>
+                        </div>
+                    </div>
+                    <div id="noChartsMsg" class="text-center py-8 text-gray-500 text-sm hidden">
+                        No numeric columns available for visualization
+                    </div>
+                </div>
+
+                <!-- Insights Section -->
+                <div id="insightsPanel" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hidden">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Analysis Results</h2>
+                    <button id="generateBtn"
+                        class="w-full bg-slate-700 text-white py-3 rounded font-medium hover:bg-slate-800 transition text-sm">
+                        Generate AI Insights
+                    </button>
+                    <div id="insightsSpinner" class="mt-4 hidden flex justify-center">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-700"></div>
+                    </div>
+
+                    <div id="insightsContent" class="mt-6 hidden space-y-6">
+                        <!-- Summary section with markdown rendering -->
+                        <div class="border-b border-gray-200 pb-4">
+                            <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">Executive
+                                Summary</h3>
+                            <div id="summaryText" class="text-gray-700 prose prose-sm max-w-none"></div>
+                        </div>
+
+                        <!-- Key Trends -->
+                        <div class="border-b border-gray-200 pb-4">
+                            <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">Key Trends</h3>
+                            <ul id="trendsList" class="list-disc list-inside space-y-1 text-sm text-gray-700"></ul>
+                        </div>
+
+                        <!-- Outliers -->
+                        <div id="outliersSection" class="border-b border-gray-200 pb-4 hidden">
+                            <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">Outliers
+                                Detected</h3>
+                            <ul id="outliersList" class="list-disc list-inside space-y-1 text-sm text-gray-700"></ul>
+                        </div>
+
+                        <!-- Risks -->
+                        <div id="risksSection" class="border-b border-gray-200 pb-4 hidden">
+                            <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">Risks</h3>
+                            <ul id="risksList" class="list-disc list-inside space-y-1 text-sm text-gray-700"></ul>
+                        </div>
+
+                        <!-- Recommendations -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">Recommendations
+                            </h3>
+                            <ul id="recommendationsList" class="list-disc list-inside space-y-1 text-sm text-gray-700">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Section -->
+                <div id="exportPanel" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hidden">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Export Report</h2>
+                    <div class="flex gap-3">
+                        <button id="copyBtn"
+                            class="flex-1 bg-slate-600 text-white px-4 py-2 rounded hover:bg-slate-700 transition text-sm font-medium">
+                            Copy to Clipboard
+                        </button>
+                        <button id="downloadBtn"
+                            class="flex-1 bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-800 transition text-sm font-medium">
+                            Download Report
+                        </button>
+                    </div>
+                    <div id="exportSuccess"
+                        class="mt-3 hidden bg-green-50 border border-green-200 text-green-700 px-4 py-2 rounded text-sm">
+                    </div>
+                </div>
+
+                <!-- Follow-Up Question Section -->
+                <!-- Follow-Up Analysis Section (Persistent Log) -->
+                <div id="questionPanel"
+                    class="bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col hidden h-[600px]">
+                    <div class="p-6 border-b border-gray-100">
+                        <h2 class="text-xl font-semibold text-gray-800">Follow-Up Analysis</h2>
+                        <p class="text-sm text-gray-500">Ask questions to dig deeper into specific trends or anomalies.
+                        </p>
+                    </div>
+
+                    <!-- Q&A History Log -->
+                    <div id="qaHistoryLog" class="flex-1 overflow-y-auto p-6 space-y-8 bg-gray-50">
+                        <!-- Questions will be injected here -->
+                        <div id="qaEmptyState" class="text-center text-gray-400 py-10 italic">
+                            No questions asked yet. Try asking about specific trends.
+                        </div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="p-6 bg-white border-t border-gray-200">
+                        <div class="flex gap-2">
+                            <input type="text" id="questionInput"
+                                placeholder="E.g., 'Why is sales dropping in Q3?' (Min 3 chars)"
+                                class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500 text-sm shadow-sm">
+                            <button id="askBtn"
+                                class="bg-slate-700 text-white px-6 py-3 rounded-lg hover:bg-slate-800 transition font-medium text-sm shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                                Ask Analysis
+                            </button>
+                        </div>
+                        <div id="qaLoading" class="hidden mt-2 text-xs text-slate-500 flex items-center gap-2">
+                            <div class="animate-spin rounded-full h-3 w-3 border-b-2 border-slate-500"></div>
+                            Analyzing dataset and previous context...
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Report History -->
+            <div class="space-y-6">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Report History</h2>
+                    <p class="text-xs text-gray-500 mb-4">Last 5 reports</p>
+                    <div id="reportsList" class="space-y-2">
+                        <p class="text-sm text-gray-400 text-center py-4">No reports yet</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>

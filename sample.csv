@@ -1,0 +1,10 @@
+product,sales,region,month
+Widget A,1200,North,Jan
+Widget B,980,South,Jan
+Widget A,1350,North,Feb
+Widget C,750,East,Feb
+Widget B,1100,South,Feb
+Widget A,1500,West,Mar
+Widget C,890,East,Mar
+Widget B,1050,North,Mar
+Widget D,1250,South,Mar
